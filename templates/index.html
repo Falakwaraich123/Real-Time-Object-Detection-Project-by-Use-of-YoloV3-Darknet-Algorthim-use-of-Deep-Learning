@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+
+  <title>Camera Streaming</title>
+
+  <link rel = "icon"  href="/static/logo.png" type="image/x-icon">
+
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color: white">
+  <div id="data1" class="modal" style="height: 100%;">
+    <!-- <span onclick="document.getElementById('data1').style.display='none'" class="close" title="Close Modal">&times;</span> -->
+    <nav class="navbar navbar-expand-sm bg-danger navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><b><i class="flag flag-us"></i>OpenDrive</b></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+             <li>
+              <a  class="btn btn-danger" href="#" onclick="document.getElementById('data1').style.display='none'" ><b>||</b></a>
+            </li>
+            <li>
+              <a  class="btn btn-danger" href="#" onclick="document.getElementById('data1').style.display='none'" ><b>Home</b></a>
+            </li>
+            &nbsp;
+            <li>
+              <a class="btn btn-danger" href="#" onclick="getData()"><b>Data<b></a>
+            </li>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown"><b>Active User</b>
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu btn btn-outline-light">
+            <li><a href="#">{{user}}</a></li>
+            <li><a href="/SignOut">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav> 
+    <!-- <a  class="btn btn-outline-light"href="#">Home</a> -->
+    <!-- <button onclick="getData()" style="width:auto; margin-left: 50%;">Reload</button> -->
+    <div id="example-table"></div>
+  </div>
+
+
+  <nav class="navbar navbar-expand-sm bg-danger navbar-dark">
+    <div class="container-fluid">
+       <a class="navbar-brand" href="#"><b>OpenDrive</b></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li>
+              <a  class="btn btn-danger" href="#" onclick="document.getElementById('data1').style.display='none'" ><b>||</b></a>
+            </li>
+            <li><a  class="btn btn-danger"href="#"><b>Home</b></a></li>
+              &nbsp;
+            <li><a class="btn btn-danger" href="#" onclick="document.getElementById('data1').style.display='block'; getData()"><b>Data</b></a></li>
+          </ul>
+        </div>
+      <div class="dropdown">
+        <button class="btn btn-danger dropdown-toggle" src="/static/user.png" type="button" data-toggle="dropdown"><b>Options</b>
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu btn btn-outline-light">
+          <li><a href="#">{{user}}</a></li>
+          <li><a href="/SignOut">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav> 
+
+  <div class="container">
+    <div class="row" id="rw">
+      <div class="col-sm-3" style = "border-radius: 10%; margin-top: 10px;">
+        <input type="image" src="/static/camera256.jpg" style="border-radius: 10%; height:250px; width: 95%;font-size: 20px; padding:13px; margin-left:3px;" type="button" onclick="addwebcam()">
+      </div>
+    </div>
+  </div>
+  <!-- <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/tabulator.min.css" rel="stylesheet"> -->
+  <link href="https://unpkg.com/tabulator-tables@4.2.7/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.7/dist/js/tabulator.min.js"></script>
+  <script>
+    function addwebcam() {
+      document.querySelector('#rw').insertAdjacentHTML(
+    'afterbegin',
+    '<div class="col-sm-3"><img id="bg" style="height:250px; width: 100%;padding:10px; border-radius: 10%" src="{{ url_for("video_feed") }}"></div>'
+
+        )
+
+    }
+  </script>
+  <script type="text/javascript">
+  var table = new Tabulator("#example-table", {
+  height:"100%",
+  layout:"fitColumns",
+  placeholder:"No Data Set",
+  columns:[
+      {title:"Image", field:"Image", formatter:"image", formatterParams:{
+                                                                              height:"150px",
+                                                                              width:"150px",
+                                                                          }},
+      {title:"Label", field:"Label", sorter:"string", headerFilter:"input", align:"center"},
+      {title:"Confidance", field:"Confidance", sorter:"number", headerFilter:"input", align:"center"},
+      {title:"FPS", field:"FPS", sorter:"number", headerFilter:"input", align:"center"},
+      {title:"Time", field:"Time", sorter:"string", headerFilter:"input", align:"center"},
+  ],
+});
+          function showImage()
+          {
+            document.getElementById('loadingImage').style.visibility="visible";
+          }
+          function getData() {
+            // alert("Hi data");
+            table.setData("http://127.0.0.1:5000/getLogsData");            
+          }
+    </script>
+
+
+</body>
+</html>
